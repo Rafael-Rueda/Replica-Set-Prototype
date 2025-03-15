@@ -23,82 +23,12 @@ docker pull mongo:latest
 mkdir ~/projeto
 ```
 ---
-- **Passo 2:** Criar o arquivo **docker-compose.yml** :
-```yml
-version: '3.8'
-services:
-  posts_app:
-      build: .
-      image: php:8.2-apache
-      container_name: posts_app
-      volumes:
-        - ./src:/var/www/html
-      networks:
-        - mongo-cluster
-      environment:
-        MONGO_URI: "mongodb://mongo1:27017,mongo2:27018,mongo3:27019,mongo4:27020/?replicaSet=rs0"
-      ports:
-        - "8080:80"
+- **Passo 2:** Clonar esse repositório que contém o arquivo **docker-compose.yml** :
 
-  mongo1:
-    image: mongo:latest
-    container_name: mongo1
-    restart: always
-    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
-    ports:
-      - "27017:27017"
-    networks:
-      - mongo-cluster
-    volumes:
-      - mongo1_data:/data/db
-
-  mongo2:
-    image: mongo:latest
-    container_name: mongo2
-    restart: always
-    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
-    ports:
-      - "27018:27017"
-    networks:
-      - mongo-cluster
-    volumes:
-      - mongo2_data:/data/db
-
-  mongo3:
-    image: mongo:latest
-    container_name: mongo3
-    restart: always
-    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
-    ports:
-      - "27019:27017"
-    networks:
-      - mongo-cluster
-    volumes:
-      - mongo3_data:/data/db
-
-  mongo4:
-    image: mongo:latest
-    container_name: mongo4
-    restart: always
-    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
-    ports:
-      - "27020:27017"
-
-    networks:
-      - mongo-cluster
-
-    volumes:
-      - mongo4_data:/data/db
-
-networks:
-  mongo-cluster:
-
-volumes:
-  mongo1_data:
-  mongo2_data:
-  mongo3_data:
-  mongo4_data:
+```shell
+git clone https://github.com/Rafael-Rueda/Replica-Set-Prototype.git
 ```
+
 ---
 - **Passo 3:** Executar o comando para subir os containers no Docker.
 
