@@ -8,7 +8,7 @@ use MongoDB\Client;
 
 // Conexão com o MongoDB usando o replica set
 try {
-    $client = new Client("mongodb://mongo1:27017,mongo2:27018,mongo3:27019,mongo4:27020/?replicaSet=rs0");
+    $client = new Client("mongodb://mongo1:27017,mongo2:27017,mongo3:27017,mongo4:27017/?replicaSet=rs0");
 
     $collection = $client->posts_app->posts;
 
