@@ -1,0 +1,8 @@
+{
+    "name": "posts/app",
+    "description": "Aplicativo simples de posts utilizando um banco de dados Replica-Set",
+    "type": "project",
+    "require": {
+        "mongodb/mongodb": "^1.21"
+    }
+}

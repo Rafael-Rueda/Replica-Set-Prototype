@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  posts_app:
+      build: .
+      image: php:8.2-apache
+      container_name: posts_app
+      volumes:
+        - ./src:/var/www/html
+      command: sh -c "composer install && apache2-foreground"
+      networks:
+        - mongo-cluster
+      environment:
+        MONGO_URI: "mongodb://mongo1:27017,mongo2:27018,mongo3:27019,mongo4:27020/?replicaSet=rs0"
+      ports:
+        - "8080:80"
+  mongo1:
+    image: mongo:latest
+    container_name: mongo1
+    restart: always
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    ports:
+      - "27017:27017"
+    networks:
+      - mongo-cluster
+    volumes:
+      - mongo1_data:/data/db
+      - ./scripts/init-replica.sh:/scripts/init-replica.sh
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.runCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  mongo2:
+    image: mongo:latest
+    container_name: mongo2
+    restart: always
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    ports:
+      - "27018:27017"
+    networks:
+      - mongo-cluster
+    volumes:
+      - mongo2_data:/data/db
+
+  mongo3:
+    image: mongo:latest
+    container_name: mongo3
+    restart: always
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    ports:
+      - "27019:27017"
+    networks:
+      - mongo-cluster
+    volumes:
+      - mongo3_data:/data/db
+
+  mongo4:
+    image: mongo:latest
+    container_name: mongo4
+    restart: always
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    ports:
+      - "27020:27017"
+    networks:
+      - mongo-cluster
+    volumes:
+      - mongo4_data:/data/db
+
+networks:
+  mongo-cluster:
+
+volumes:
+  mongo1_data:
+  mongo2_data:
+  mongo3_data:
+  mongo4_data:
